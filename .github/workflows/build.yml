@@ -8,6 +8,9 @@ on:
     - ".site/*"
     - "readingList.csv"
     - "generator.go"
+    - "run.sh"
+    - "datasette.sh"
+    - "sqlite-utils.Dockerfile"
 
 concurrency: # Prevent two instances of this running at once
   group: deploy-to-ghpages
@@ -37,3 +40,18 @@ jobs:
           PUBLISH_DIR: .site
           PUBLISH_BRANCH: gh-pages
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  build-datasette:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.ref }}
+          fetch-depth: 0
+      - name: build and publish
+        env:
+            VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |-
+          git config user.name "Automated"
+          git config user.email "actions@users.noreply.github.com"  
+          ./run.sh
