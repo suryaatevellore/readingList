@@ -25,7 +25,7 @@ sql-utils() {
 makeDB() {
   local db="$1"
   rm -rf "$db" || true
-  sqlite-utils insert "$db" read readingList.csv --csv
+  sql-utils insert "$db" read readingList.csv --csv
   sql-utils optimize "$db"
 }
 
