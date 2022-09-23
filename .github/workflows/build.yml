@@ -11,6 +11,7 @@ on:
     - "run.sh"
     - "datasette.sh"
     - "sqlite-utils.Dockerfile"
+    - "datasette.Dockerfile"
 
 concurrency: # Prevent two instances of this running at once
   group: deploy-to-ghpages
