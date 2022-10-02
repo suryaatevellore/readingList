@@ -50,6 +50,7 @@ publishDB() {
   set +x
   local dockerDatasette="datasette"
   docker build --tag "$dockerDatasette" --pull --file datasette.Dockerfile .
+  if [ -z ${VERCEL_TOKEN+x} ]; then echo "VERCEL_TOKEN is unset"; else echo "VERCEL_TOKEN is set to '$VERCEL_TOKEN'"; fi
   docker run \
     -v"$(pwd):/wd" \
     -w /wd \
