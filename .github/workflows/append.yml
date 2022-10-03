@@ -38,5 +38,4 @@ jobs:
   build-site:
     needs: append-to-reading-list
     uses: ./.github/workflows/build.yml
-    with: 
-        VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+
