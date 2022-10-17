@@ -131,7 +131,9 @@ func makeListHTML(groups []*entryGroup) g.Node {
 				article.Title,
 				article.Description,
 				article.Date.Format(dateFormat),
-				article.HackerNewsURL),
+				article.HackerNewsURL,
+				article.Screenshot,
+				article.PDF),
 			)
 
 		}
@@ -142,7 +144,7 @@ func makeListHTML(groups []*entryGroup) g.Node {
 	return Div(parts...)
 }
 
-func articleLinkComponent(url, title, description, date, hnURL string) g.Node {
+func articleLinkComponent(url, title, description, date, hnURL string, screenshot string, pdf string) g.Node {
 	return Li(
 		A(g.Attr("href", url), g.Text(title)),
 		g.Text(" - "+date),
@@ -156,6 +158,18 @@ func articleLinkComponent(url, title, description, date, hnURL string) g.Node {
 					g.Attr("height", "14em"),
 					g.Attr("title", "View on Hacker News"),
 					g.Attr("alt", "Hacker News logo"),
+				)),
+		})),
+		g.If(screenshot != "", g.Group([]g.Node{
+			g.Text(" - "),
+			A(
+				g.Attr("href", pdf),
+				g.Attr("rel", "noopener"),
+				Img(
+					g.Attr("src", screenshot),
+					g.Attr("height", "14em"),
+					g.Attr("title", "View PDF"),
+					g.Attr("alt", "Screenshot"),
 				)),
 		})),
 		g.If(description != "", Span(g.Attr("class", "secondary"), g.Text(" - "+description))),
@@ -192,7 +206,7 @@ func GenerateSite() error {
 				numArticles,
 				time.Now().Format(dateFormat),
 				"<a href=\"https://github.com/jamesmstone/readingList\" rel=\"noopener\"><code>jamesmstone/readingList</code></a>",
-				"<a href=\"https://github.com/codemicro/readingList\" rel=\"noopener\"><code>codemicro/readingList</code></a>",
+				"<a href=\"https://github.com/jamesmstone/readingList\" rel=\"noopener\"><code>codemicro/readingList</code></a>",
 			),
 		)),
 	)

@@ -1,4 +1,4 @@
-module github.com/codemicro/readingList
+module github.com/jamesmstone/readingList
 
 go 1.18
 

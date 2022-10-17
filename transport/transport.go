@@ -13,6 +13,8 @@ type Inputs struct {
 	Title       string `validate:"required" query:"title"`
 	Description string `query:"description"`
 	Image       string `query:"image"`
+	Screenshot  string `query:"screenshot"`
+	PDF         string `query:"pdf"`
 }
 
 func (i *Inputs) Validate() error {

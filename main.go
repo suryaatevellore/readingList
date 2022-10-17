@@ -16,6 +16,8 @@ type readingListEntry struct {
 	Image         string    `csv:"image,omitempty"`
 	Date          time.Time `csv:"date,omitempty"`
 	HackerNewsURL string    `csv:"hnurl,omitempty"`
+	Screenshot    string    `csv:"screenshot,omitempty"`
+	PDF           string    `csv:"pdf,omitempty"`
 }
 
 func run() error {

@@ -10,7 +10,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/codemicro/readingList/transport"
+	"github.com/jamesmstone/readingList/transport"
 	"github.com/jszwec/csvutil"
 )
 
@@ -67,6 +67,8 @@ func AddRowToCSV() error {
 		Image:         data.Image,
 		Date:          time.Now(),
 		HackerNewsURL: hnURL,
+		Screenshot:    data.Screenshot,
+		PDF:           data.PDF,
 	}})
 	if err != nil {
 		return err
