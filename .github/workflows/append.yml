@@ -46,7 +46,7 @@ jobs:
           url=$(jq -r .url <(echo "$RL_INPUT_JSON"))
           title=$(jq -r .title <(echo "$RL_INPUT_JSON"))
           screenshot_filename="$(date +%s)-$title.png"
-          shot-scraper "$url" -o ".site/$screenshot_filename"
+          shot-scraper "$url" --width 400 --height 400 -o ".site/$screenshot_filename"
           pdf_filename="$(date +%s)-$title.pdf"
           shot-scraper pdf "$url" -o ".site/$pdf_filename"
           RL_INPUT_JSON=$(jq -c '. + {"screenshot":"'"$screenshot_filename"'","pdf":"'"$pdf_filename"'"}' <(echo "$RL_INPUT_JSON"))
