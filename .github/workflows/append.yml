@@ -44,7 +44,7 @@ jobs:
           RL_INPUT_JSON: ${{ toJSON(github.event.client_payload) }}
         run: |
           url=$(jq -r .url <(echo "$RL_INPUT_JSON"))
-          title=$(jq -r .title <(echo "$RL_INPUT_JSON"))
+          title=$(jq -r .title <(echo "$RL_INPUT_JSON") | jq -Rsa .)
           screenshot_filename="$(date +%s)-$title.png"
           shot-scraper "$url" --width 400 --height 400 -o ".site/$screenshot_filename"
           pdf_filename="$(date +%s)-$title.pdf"
