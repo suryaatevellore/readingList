@@ -167,6 +167,7 @@ func articleLinkComponent(url, title, description, date, hnURL string, screensho
 				g.Attr("rel", "noopener"),
 				Img(
 					g.Attr("src", screenshot),
+					g.Attr("lazy", "lazy"),
 					g.Attr("height", "14em"),
 					g.Attr("title", "View PDF"),
 					g.Attr("alt", "Screenshot"),
