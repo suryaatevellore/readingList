@@ -26,6 +26,7 @@ makeDB() {
   local db="$1"
   rm -rf "$db" || true
   sql-utils insert "$db" read readingList.csv --csv
+  sql-utils enable-fts "$db" read title description url
   sql-utils optimize "$db"
 }
 
