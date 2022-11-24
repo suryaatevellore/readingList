@@ -210,6 +210,12 @@ func GenerateSite() error {
 				"<a href=\"https://github.com/jamesmstone/readingList\" rel=\"noopener\"><code>codemicro/readingList</code></a>",
 			),
 		)),
+		P(g.Raw(
+			fmt.Sprintf(
+				"A %s instance also exists for quick analysis.",
+				"<a href=\"https://api-read.jamesst.one/\" rel=\"noopener\">datasette</a>",
+			),
+		)),
 	)
 
 	listing := makeListHTML(groupedEntries)
