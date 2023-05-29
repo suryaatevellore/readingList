@@ -154,7 +154,7 @@ func articleLinkComponent(url, title, description, date, hnURL string, screensho
 				g.Attr("href", hnURL),
 				g.Attr("rel", "noopener"),
 				Img(
-					g.Attr("src", "https://news.ycombinator.com/y18.gif"),
+					g.Attr("src", "https://news.ycombinator.com/y18.svg"),
 					g.Attr("height", "14em"),
 					g.Attr("title", "View on Hacker News"),
 					g.Attr("alt", "Hacker News logo"),
