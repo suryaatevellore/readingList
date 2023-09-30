@@ -68,6 +68,16 @@ jobs:
           git add .
           git commit -m "Automated reading list update on $(date)"
           git push -u origin master
+      
+      - name: push to db
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          psql "$DATABASE_URL"  \ 
+            --single-transaction \
+            -c "drop table if exists read;" \
+            -c "\copy read FROM 'readingList.csv' DELIMITER ',' CSV HEADER;"
+
 
   build-site:
     needs: append-to-reading-list
