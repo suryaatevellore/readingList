@@ -114,5 +114,5 @@ jobs:
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: |
-          apt install pgloader
+          sudo apt install pgloader
           pgloader sqlite:///readingList.db "$DATABASE_URL"
