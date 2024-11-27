@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+    "net/url"
 	"os"
 	"strings"
 	"time"
@@ -13,6 +14,14 @@ import (
 	"github.com/jamesmstone/readingList/transport"
 	"github.com/jszwec/csvutil"
 )
+
+func extractDomain(urlStr string) (string, error) {
+    u, err := url.Parse(urlStr)
+    if err != nil {
+        return "", err
+    }
+    return u.Host, nil
+}
 
 func AddRowToCSV() error {
 	data := new(transport.Inputs)
@@ -28,7 +37,10 @@ func AddRowToCSV() error {
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Unable to search Hacker News for URL %s\n", data.URL)
 	}
-
+	domain, err := extractDomain(data.URL)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Unable to extract domain for URL %s\n", data.URL)
+	}
 	// if CSV file does not exist, create it with a header
 	csvFilePath := readingListFile
 	{
@@ -69,6 +81,7 @@ func AddRowToCSV() error {
 		HackerNewsURL: hnURL,
 		Screenshot:    data.Screenshot,
 		PDF:           data.PDF,
+		domain:        domain,
 	}})
 	if err != nil {
 		return err

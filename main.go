@@ -18,6 +18,7 @@ type readingListEntry struct {
 	HackerNewsURL string    `csv:"hnurl,omitempty"`
 	Screenshot    string    `csv:"screenshot,omitempty"`
 	PDF           string    `csv:"pdf,omitempty"`
+	Domain        string    `csv:"domain,omitempty"`
 }
 
 func run() error {
