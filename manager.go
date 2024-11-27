@@ -81,7 +81,7 @@ func AddRowToCSV() error {
 		HackerNewsURL: hnURL,
 		Screenshot:    data.Screenshot,
 		PDF:           data.PDF,
-		domain:        domain,
+		Domain:        domain,
 	}})
 	if err != nil {
 		return err
