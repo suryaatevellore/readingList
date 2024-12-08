@@ -165,13 +165,8 @@ func articleLinkComponent(url, title, description, date, hnURL string, screensho
 			A(
 				g.Attr("href", pdf),
 				g.Attr("rel", "noopener"),
-				Img(
-					g.Attr("src", screenshot),
-					g.Attr("lazy", "lazy"),
-					g.Attr("height", "14em"),
-					g.Attr("title", "View PDF"),
-					g.Attr("alt", "Screenshot"),
-				)),
+				g.Text("PDF")
+			),
 		})),
 		g.If(description != "", Span(g.Attr("class", "secondary"), g.Text(" - "+description))),
 	)
