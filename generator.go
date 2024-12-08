@@ -165,7 +165,7 @@ func articleLinkComponent(url, title, description, date, hnURL string, screensho
 			A(
 				g.Attr("href", pdf),
 				g.Attr("rel", "noopener"),
-				g.Text("PDF")
+				g.Text("PDF"),
 			),
 		})),
 		g.If(description != "", Span(g.Attr("class", "secondary"), g.Text(" - "+description))),
