@@ -59,11 +59,11 @@ jobs:
       - name: Append to reading list
         env:
           RL_INPUT_JSON: ${{ env.RL_INPUT_JSON }}
-        run: go run github.com/jamesmstone/readingList add
+        run: go run github.com/suryaatevellore/readingList add
 
       - name: Commit changes
         run: |
-          git config user.email "readinglistauto@jamesst.one"
+          git config user.email "suryaatvellore@gmail.com"
           git config user.name "Automatic update"
           git add .
           git commit -m "Automated reading list update on $(date)"
@@ -86,7 +86,7 @@ jobs:
           go-version: 1.18
 
       - name: Run generator
-        run: go run github.com/jamesmstone/readingList generateSite
+        run: go run github.com/suryaatevellore/readingList generateSite
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v1.1.0
