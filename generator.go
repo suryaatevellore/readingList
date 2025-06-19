@@ -10,10 +10,11 @@ import (
 	"strings"
 	"time"
 
+	g "maragudk/gomponents"
+	c "maragudk/gomponents/components"
+	. "maragudk/gomponents/html"
+
 	"github.com/jszwec/csvutil"
-	g "github.com/maragudk/gomponents"
-	c "github.com/maragudk/gomponents/components"
-	. "github.com/maragudk/gomponents/html"
 )
 
 const dateFormat = "2006-01-02"
