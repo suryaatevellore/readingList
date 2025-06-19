@@ -192,7 +192,7 @@ func GenerateSite() error {
 	numArticles := len(entries)
 	groupedEntries := groupEntriesByMonth(entries)
 
-	const pageTitle = "James' read list"
+	const pageTitle = "Surya's read list"
 
 	head := Div(
 		H1(g.Text(pageTitle)),
@@ -201,8 +201,8 @@ func GenerateSite() error {
 				"A mostly complete list of articles I've read on the internet<br>There are currently %d entries in the list<br>Last modified %s<br>Repo: %s<br> Forked from Repo: %s",
 				numArticles,
 				time.Now().Format(dateFormat),
-				"<a href=\"https://github.com/jamesmstone/readingList\" rel=\"noopener\"><code>jamesmstone/readingList</code></a>",
-				"<a href=\"https://github.com/jamesmstone/readingList\" rel=\"noopener\"><code>codemicro/readingList</code></a>",
+				"<a href=\"https://github.com/suryaatevellore/readingList\" rel=\"noopener\"><code>suryaatevellore/readingList</code></a>",
+				"<a href=\"https://github.com/suryaatevellore/readingList\" rel=\"noopener\"><code>codemicro/readingList</code></a>",
 			),
 		)),
 		P(g.Raw(

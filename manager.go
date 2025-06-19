@@ -6,21 +6,21 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
-    "net/url"
+	"net/url"
 	"os"
 	"strings"
 	"time"
 
-	"github.com/jamesmstone/readingList/transport"
 	"github.com/jszwec/csvutil"
+	"github.com/suryaatevellore/readingList/transport"
 )
 
 func extractDomain(urlStr string) (string, error) {
-    u, err := url.Parse(urlStr)
-    if err != nil {
-        return "", err
-    }
-    return u.Host, nil
+	u, err := url.Parse(urlStr)
+	if err != nil {
+		return "", err
+	}
+	return u.Host, nil
 }
 
 func AddRowToCSV() error {
