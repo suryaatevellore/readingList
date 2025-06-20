@@ -10,9 +10,9 @@ import (
 	"strings"
 	"time"
 
-	g "maragudk/gomponents"
-	c "maragudk/gomponents/components"
-	. "maragudk/gomponents/html"
+	g "maragu.dev/gomponents"
+	c "maragu.dev/gomponents/components"
+	. "maragu.dev/gomponents/html"
 
 	"github.com/jszwec/csvutil"
 )
@@ -107,16 +107,28 @@ func makeListHTML(groups []*entryGroup) g.Node {
 		subsections = append(subsections, A(g.Attr("href", "#"+group.ID), g.Textf("%s %d", group.Date.Month().String()[:3], group.Date.Year())))
 	}
 
+	var jumpLinks []g.Node
+	for i, n := range subsections {
+		jumpLinks = append(jumpLinks, n)
+		if i != len(subsections)-1 {
+			jumpLinks = append(jumpLinks, g.Text(" :: "))
+		}
+	}
+
 	parts := []g.Node{
 		Br(),
-		Span(g.Text("Jump to :: "), g.Group(g.Map(len(subsections), func(i int) g.Node {
-			n := subsections[i]
-			if i != len(subsections)-1 {
-				n = g.Group([]g.Node{n, g.Text(" :: ")})
-			}
-			return n
-		}))),
+		Span(g.Text("Jump to :: "), g.Group(jumpLinks)),
 	}
+
+	// parts := []g.Node{
+	// 	Br(),
+	// 	Span(g.Text("Jump to :: "), g.Group(g.Map(subsections, func(i int, n g.Node) g.Node {
+	// 		if i != len(subsections)-1 {
+	//     	return g.Group([]g.Node{n, g.Text(" :: ")})
+	// 	}
+	// 	return n
+	// 	}))),
+	// }
 
 	for _, group := range groups {
 
