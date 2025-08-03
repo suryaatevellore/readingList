@@ -58,7 +58,8 @@ jobs:
 
       - name: Append to reading list
         env:
-          RL_INPUT_JSON: ${{ env.RL_INPUT_JSON }}
+          RL_INPUT_JSON: ${{ toJSON(github.event.client_payload) }}
+          MONGO_CONN_TOKEN: ${{ secrets.MONGO_CONN }}
         run: go run github.com/suryaatevellore/readingList add
 
       - name: Commit changes
