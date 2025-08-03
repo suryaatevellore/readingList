@@ -16,40 +16,40 @@ jobs:
         with:
           ref: ${{ github.ref }}
           fetch-depth: 0
-
-      - name: Set up Python 3.10
-        uses: actions/setup-python@v3
-        with:
-          python-version: "3.10"
-      - uses: actions/cache@v3
-        name: Configure pip caching
-        with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
-      - name: Cache Playwright browsers
-        uses: actions/cache@v3
-        with:
-          path: ~/.cache/ms-playwright/
-          key: ${{ runner.os }}-browsers
-      - name: Install dependencies
-        run: |
-          pip install -r requirements.txt
-      - name: Install Playwright dependencies
-        run: |
-          shot-scraper install
-      - name: Take shots
-        env:
-          RL_INPUT_JSON: ${{ toJSON(github.event.client_payload) }}
-        run: |
-          url=$(jq -r .url <(echo "$RL_INPUT_JSON"))
-          screenshot_filename="$(date +%s).png"
-          shot-scraper "$url" --width 400 --height 400 -o ".site/$screenshot_filename"
-          pdf_filename="$(date +%s).pdf"
-          shot-scraper pdf "$url" -o ".site/$pdf_filename"
-          RL_INPUT_JSON=$(jq -c '. + {"screenshot":"'"$screenshot_filename"'","pdf":"'"$pdf_filename"'"}' <(echo "$RL_INPUT_JSON"))
-          echo "RL_INPUT_JSON=$RL_INPUT_JSON">> $GITHUB_ENV
+      # disable python installation and caching that we need for screenshots
+      # - name: Set up Python 3.10
+      #   uses: actions/setup-python@v3
+      #   with:
+      #     python-version: "3.10"
+      # - uses: actions/cache@v3
+      #   name: Configure pip caching
+      #   with:
+      #     path: ~/.cache/pip
+      #     key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-pip-
+      # - name: Cache Playwright browsers
+      #   uses: actions/cache@v3
+      #   with:
+      #     path: ~/.cache/ms-playwright/
+      #     key: ${{ runner.os }}-browsers
+      # - name: Install dependencies
+      #   run: |
+      #     pip install -r requirements.txt
+      # - name: Install Playwright dependencies
+      #   run: |
+      #     shot-scraper install
+      # - name: Take shots
+      #   env:
+      #     RL_INPUT_JSON: ${{ toJSON(github.event.client_payload) }}
+      #   run: |
+      #     url=$(jq -r .url <(echo "$RL_INPUT_JSON"))
+      #     screenshot_filename="$(date +%s).png"
+      #     shot-scraper "$url" --width 400 --height 400 -o ".site/$screenshot_filename"
+      #     pdf_filename="$(date +%s).pdf"
+      #     shot-scraper pdf "$url" -o ".site/$pdf_filename"
+      #     RL_INPUT_JSON=$(jq -c '. + {"screenshot":"'"$screenshot_filename"'","pdf":"'"$pdf_filename"'"}' <(echo "$RL_INPUT_JSON"))
+      #     echo "RL_INPUT_JSON=$RL_INPUT_JSON">> $GITHUB_ENV
           
       - name: Set up Go
         uses: actions/setup-go@v2

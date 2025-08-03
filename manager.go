@@ -80,8 +80,9 @@ func AddRowToCSV() error {
 		Date:          time.Now(),
 		HackerNewsURL: hnURL,
 		Screenshot:    data.Screenshot,
-		PDF:           data.PDF,
-		Domain:        domain,
+		// we don't need the PDFs, it increases the total size of the csv file
+		// PDF:           data.PDF,
+		Domain: domain,
 	}})
 	if err != nil {
 		return err
