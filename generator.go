@@ -200,7 +200,7 @@ func GenerateSite() error {
 
 	err = csvutil.Unmarshal(fcont, &entries)
 	if err != nil {
-		return err
+		return fmt.Errorf("unable to unmarshal csv: [%v]", err)
 	}
 
 	numArticles := len(entries)

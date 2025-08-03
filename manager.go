@@ -26,7 +26,7 @@ func extractDomain(urlStr string) (string, error) {
 func AddRowToCSV() error {
 	data := new(transport.Inputs)
 	if err := loadInputs(data); err != nil {
-		return err
+		return fmt.Errorf("unable to load input: [%v]", err)
 	}
 
 	if err := data.Validate(); err != nil {
@@ -102,7 +102,11 @@ func AddRowToCSV() error {
 }
 
 func loadInputs(data any) error {
-	return json.Unmarshal([]byte(os.Getenv("RL_INPUT_JSON")), data)
+	loaded := os.Getenv("RL_INPUT_JSON")
+	if len(loaded) == 0 {
+		return fmt.Errorf("unable to gather input from environment")
+	}
+	return json.Unmarshal([]byte(loaded), data)
 }
 
 // HACKER NEWS STUFF
@@ -150,7 +154,7 @@ func queryHackerNews(url string) (string, error) {
 
 	err = json.Unmarshal(responseBody, &x)
 	if err != nil {
-		return "", err
+		return "", fmt.Errorf("unable to unmarshal hackernews response: [%v]", err)
 	}
 
 	var targetSubmission *hackerNewsEntry
