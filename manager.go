@@ -72,9 +72,14 @@ func AddRowToCSV() error {
 	if err != nil {
 		return err
 	}
+	writer := csv.NewWriter(f)
+	defer func() {
+		writer.Flush()
+		f.Close()
+	}()
 
 	// Create an encoder that writes to the file
-	encoder := csvutil.NewEncoder(csv.NewWriter(f))
+	encoder := csvutil.NewEncoder(writer)
 
 	// Create and write the entry
 	entry := &readingListEntry{
