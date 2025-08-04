@@ -105,7 +105,7 @@ func AddRowToCSV() error {
 
 	// Add the entry to MongoDB
 	if err := AddRowToMongo(entry, hnURL, domain); err != nil {
-		return fmt.Errorf("unable to add row to MongoDB: %w", err)
+		fmt.Printf("unable to add row to MongoDB: %v", err)
 	}
 
 	return nil
