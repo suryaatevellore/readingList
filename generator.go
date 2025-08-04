@@ -96,7 +96,6 @@ func groupEntriesByMonth(entries []*readingListEntry) entryGroupSlice {
 
 // makeTILHTML generates HTML from a []*entryGroup to make a list of articles
 func makeListHTML(groups []*entryGroup) g.Node {
-
 	headerLevel := H3
 
 	numGroups := len(groups)
@@ -119,16 +118,6 @@ func makeListHTML(groups []*entryGroup) g.Node {
 		Br(),
 		Span(g.Text("Jump to :: "), g.Group(jumpLinks)),
 	}
-
-	// parts := []g.Node{
-	// 	Br(),
-	// 	Span(g.Text("Jump to :: "), g.Group(g.Map(subsections, func(i int, n g.Node) g.Node {
-	// 		if i != len(subsections)-1 {
-	//     	return g.Group([]g.Node{n, g.Text(" :: ")})
-	// 	}
-	// 	return n
-	// 	}))),
-	// }
 
 	for _, group := range groups {
 
@@ -158,7 +147,7 @@ func makeListHTML(groups []*entryGroup) g.Node {
 	return Div(parts...)
 }
 
-func articleLinkComponent(url, title, description, date, hnURL, screenshot, pdf string) g.Node {
+func articleLinkComponent(url, title, description, date, hnURL string, screenshot string, pdf string) g.Node {
 	return Li(
 		A(g.Attr("href", url), g.Text(title)),
 		g.Text(" - "+date),
@@ -174,7 +163,6 @@ func articleLinkComponent(url, title, description, date, hnURL, screenshot, pdf 
 					g.Attr("alt", "Hacker News logo"),
 				)),
 		})),
-		// no pdf or screenshot
 		g.If(screenshot != "", g.Group([]g.Node{
 			g.Text(" - "),
 			A(
@@ -201,13 +189,13 @@ func GenerateSite() error {
 
 	err = csvutil.Unmarshal(fcont, &entries)
 	if err != nil {
-		return fmt.Errorf("unable to unmarshal csv: [%v]", err)
+		return err
 	}
 
 	numArticles := len(entries)
 	groupedEntries := groupEntriesByMonth(entries)
 
-	const pageTitle = "Surya's read list"
+	const pageTitle = "James' read list"
 
 	head := Div(
 		H1(g.Text(pageTitle)),
@@ -216,8 +204,8 @@ func GenerateSite() error {
 				"A mostly complete list of articles I've read on the internet<br>There are currently %d entries in the list<br>Last modified %s<br>Repo: %s<br> Forked from Repo: %s",
 				numArticles,
 				time.Now().Format(dateFormat),
-				"<a href=\"https://github.com/suryaatevellore/readingList\" rel=\"noopener\"><code>suryaatevellore/readingList</code></a>",
-				"<a href=\"https://github.com/suryaatevellore/readingList\" rel=\"noopener\"><code>codemicro/readingList</code></a>",
+				"<a href=\"https://github.com/jamesmstone/readingList\" rel=\"noopener\"><code>jamesmstone/readingList</code></a>",
+				"<a href=\"https://github.com/jamesmstone/readingList\" rel=\"noopener\"><code>codemicro/readingList</code></a>",
 			),
 		)),
 		P(g.Raw(
