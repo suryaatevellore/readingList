@@ -1,7 +1,7 @@
 package main
 
 import (
-	"bytes"
+	"encoding/csv"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -60,19 +60,17 @@ func AddRowToCSV() error {
 		}
 	}
 
-	// make changes to CSV file
-
+	// open a CSV file in append mode
 	f, err := os.OpenFile(csvFilePath, os.O_APPEND|os.O_WRONLY, 0644)
 	if err != nil {
 		return err
 	}
 
-	// This call to Marshal will generate something like this:
-	//     url,title,description,date
-	//     Hello,Title,Description,2021-07-12T18:04:20.981291487+01:00
-	// We're only interested in appending the LAST line, so we split the output by newlines and only take the item with
-	// index 1.
-	b, err := csvutil.Marshal([]*readingListEntry{{
+	// Create an encoder that writes to the file
+	encoder := csvutil.NewEncoder(csv.NewWriter(f))
+
+	// Create and write the entry
+	entry := &readingListEntry{
 		URL:           data.URL,
 		Title:         data.Title,
 		Description:   strings.ReplaceAll(data.Description, "\n", " "),
@@ -80,22 +78,14 @@ func AddRowToCSV() error {
 		Date:          time.Now(),
 		HackerNewsURL: hnURL,
 		Screenshot:    data.Screenshot,
-		// we don't need the PDFs, it increases the total size of the csv file
+		// we don't need the PDFs
 		// PDF:           data.PDF,
 		Domain: domain,
-	}})
-	if err != nil {
-		return err
 	}
 
-	splitOutput := bytes.Split(b, []byte("\n"))
-
-	if _, err = f.Write(append(splitOutput[1], byte('\n'))); err != nil {
-		return err
-	}
-
-	if err = f.Close(); err != nil {
-		return err
+	// Write the single entry - this handles all CSV formatting
+	if err := encoder.Encode(entry); err != nil {
+		return fmt.Errorf("failed to encode entry: %w", err)
 	}
 
 	return nil
