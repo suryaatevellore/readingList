@@ -59,7 +59,7 @@ jobs:
       - name: Append to reading list
         env:
           RL_INPUT_JSON: ${{ toJSON(github.event.client_payload) }}
-          # MONGO_CONN_TOKEN: ${{ secrets.MONGO_CONN }}
+          MONGO_CONN_TOKEN: ${{ secrets.MONGO_CONN }}
         run: go run . add
 
       - name: Commit changes

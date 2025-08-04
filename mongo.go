@@ -103,9 +103,9 @@ func insertEntry(entry *MongoEntry) error {
 
 // getMongoSecret ...
 func getMongoSecret() (string, error) {
-	mongoSecret := os.Getenv("MONGO_CONN")
+	mongoSecret := os.Getenv("MONGO_CONN_TOKEN")
 	if mongoSecret == "" {
-		return "", fmt.Errorf("MONGO_CONN environment variable not set")
+		return "", fmt.Errorf("MONGO_CONN_TOKEN environment variable not set")
 	}
 	return mongoSecret, nil
 }
