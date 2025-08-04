@@ -77,7 +77,7 @@ func AddRowToCSV() error {
 	//     Hello,Title,Description,2021-07-12T18:04:20.981291487+01:00
 	// We're only interested in appending the LAST line, so we split the output by newlines and only take the item with
 	// index 1.
-	b, err := csvutil.Marshal([]*readingListEntry{{
+	entry := &readingListEntry{
 		URL:           data.URL,
 		Title:         data.Title,
 		Description:   strings.ReplaceAll(data.Description, "\n", " "),
@@ -87,7 +87,8 @@ func AddRowToCSV() error {
 		Screenshot:    data.Screenshot,
 		PDF:           data.PDF,
 		Domain:        domain,
-	}})
+	}
+	b, err := csvutil.Marshal([]*readingListEntry{entry})
 	if err != nil {
 		return err
 	}
@@ -100,6 +101,11 @@ func AddRowToCSV() error {
 
 	if err = f.Close(); err != nil {
 		return err
+	}
+
+	// Add the entry to MongoDB
+	if err := AddRowToMongo(entry, hnURL, domain); err != nil {
+		return fmt.Errorf("unable to add row to MongoDB: %w", err)
 	}
 
 	return nil
