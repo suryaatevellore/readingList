@@ -1,7 +1,7 @@
 package main
 
 import (
-	"encoding/csv"
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -72,17 +72,12 @@ func AddRowToCSV() error {
 	if err != nil {
 		return err
 	}
-	writer := csv.NewWriter(f)
-	defer func() {
-		writer.Flush()
-		f.Close()
-	}()
-
-	// Create an encoder that writes to the file
-	encoder := csvutil.NewEncoder(writer)
-
-	// Create and write the entry
-	entry := &readingListEntry{
+	// This call to Marshal will generate something like this:
+	//     url,title,description,date
+	//     Hello,Title,Description,2021-07-12T18:04:20.981291487+01:00
+	// We're only interested in appending the LAST line, so we split the output by newlines and only take the item with
+	// index 1.
+	b, err := csvutil.Marshal([]*readingListEntry{{
 		URL:           data.URL,
 		Title:         data.Title,
 		Description:   strings.ReplaceAll(data.Description, "\n", " "),
@@ -90,24 +85,22 @@ func AddRowToCSV() error {
 		Date:          time.Now(),
 		HackerNewsURL: hnURL,
 		Screenshot:    data.Screenshot,
-		// we don't need the PDFs
-		// PDF:           data.PDF,
-		Domain: domain,
-	}
-
-	fmt.Printf("Adding entry: %#v\n", entry)
-	// Write the single entry - this handles all CSV formatting
-	if err := encoder.Encode(entry); err != nil {
-		return fmt.Errorf("failed to encode entry: %w", err)
-	}
-	fmt.Printf("Added entry: %s\n", entry.Title)
-
-	readData, err = os.ReadFile(csvFilePath)
+		PDF:           data.PDF,
+		Domain:        domain,
+	}})
 	if err != nil {
-		return fmt.Errorf("unable to read CSV file: %w", err)
+		return err
 	}
 
-	fmt.Printf("read %v bytes from CSV file\n", len(readData))
+	splitOutput := bytes.Split(b, []byte("\n"))
+
+	if _, err = f.Write(append(splitOutput[1], byte('\n'))); err != nil {
+		return err
+	}
+
+	if err = f.Close(); err != nil {
+		return err
+	}
 
 	return nil
 }
