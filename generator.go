@@ -146,6 +146,7 @@ func makeListHTML(groups []*entryGroup) g.Node {
 				article.Date.Format(dateFormat),
 				article.HackerNewsURL,
 				article.Screenshot,
+				article.PDF,
 			),
 			)
 
@@ -157,7 +158,7 @@ func makeListHTML(groups []*entryGroup) g.Node {
 	return Div(parts...)
 }
 
-func articleLinkComponent(url, title, description, date, hnURL string, screenshot string) g.Node {
+func articleLinkComponent(url, title, description, date, hnURL, screenshot, pdf string) g.Node {
 	return Li(
 		A(g.Attr("href", url), g.Text(title)),
 		g.Text(" - "+date),
@@ -174,14 +175,14 @@ func articleLinkComponent(url, title, description, date, hnURL string, screensho
 				)),
 		})),
 		// no pdf or screenshot
-		// g.If(screenshot != "", g.Group([]g.Node{
-		// 	g.Text(" - "),
-		// 	A(
-		// 		g.Attr("href", pdf),
-		// 		g.Attr("rel", "noopener"),
-		// 		g.Text("PDF"),
-		// 	),
-		// })),
+		g.If(screenshot != "", g.Group([]g.Node{
+			g.Text(" - "),
+			A(
+				g.Attr("href", pdf),
+				g.Attr("rel", "noopener"),
+				g.Text("PDF"),
+			),
+		})),
 		g.If(description != "", Span(g.Attr("class", "secondary"), g.Text(" - "+description))),
 	)
 }
