@@ -17,9 +17,8 @@ type readingListEntry struct {
 	Date          time.Time `csv:"date,omitempty"`
 	HackerNewsURL string    `csv:"hnurl,omitempty"`
 	Screenshot    string    `csv:"screenshot,omitempty"`
-	// no more PDFs they are too big for the .csv file
-	PDF    string `csv:"pdf,omitempty"`
-	Domain string `csv:"domain,omitempty"`
+	PDF           string    `csv:"pdf,omitempty"`
+	Domain        string    `csv:"domain,omitempty"`
 }
 
 func run() error {

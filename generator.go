@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	_ "embed"
+	"encoding/csv"
 	"fmt"
 	"io/ioutil"
 	"os"
@@ -187,9 +188,17 @@ func GenerateSite() error {
 		return err
 	}
 
-	err = csvutil.Unmarshal(fcont, &entries)
+	reader := csv.NewReader(bytes.NewReader(fcont))
+	reader.LazyQuotes = true   // Handle quotes more flexibly
+	reader.FieldsPerRecord = 9 // Expect exactly 9 fields
+
+	// Use csvutil with the configured reader
+	decoder, err := csvutil.NewDecoder(reader)
 	if err != nil {
-		return err
+		return fmt.Errorf("CSV decoder error: %w", err)
+	}
+	if err := decoder.Decode(&entries); err != nil {
+		return fmt.Errorf("CSV decode error: %w", err)
 	}
 
 	numArticles := len(entries)
