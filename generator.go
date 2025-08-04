@@ -18,7 +18,10 @@ import (
 	"github.com/jszwec/csvutil"
 )
 
-const dateFormat = "2006-01-02"
+const (
+	dateFormat = "2006-01-02"
+	pageTitle  = "Surya's read list"
+)
 
 // renderHTMLPage renders a complete HTML page
 func renderHTMLPage(title string, body []g.Node) ([]byte, error) {
@@ -222,8 +225,6 @@ func GenerateSite() error {
 	numArticles := len(entries)
 	groupedEntries := groupEntriesByMonth(entries)
 
-	const pageTitle = "James' read list"
-
 	head := Div(
 		H1(g.Text(pageTitle)),
 		P(g.Raw(
@@ -231,16 +232,16 @@ func GenerateSite() error {
 				"A mostly complete list of articles I've read on the internet<br>There are currently %d entries in the list<br>Last modified %s<br>Repo: %s<br> Forked from Repo: %s",
 				numArticles,
 				time.Now().Format(dateFormat),
-				"<a href=\"https://github.com/jamesmstone/readingList\" rel=\"noopener\"><code>jamesmstone/readingList</code></a>",
-				"<a href=\"https://github.com/jamesmstone/readingList\" rel=\"noopener\"><code>codemicro/readingList</code></a>",
+				"<a href=\"https://github.com/suryaatvellore/readingList\" rel=\"noopener\"><code>suryaatevellore/readingList</code></a>",
+				"<a href=\"https://github.com/codemicro/readingList\" rel=\"noopener\"><code>codemicro/readingList</code></a>",
 			),
 		)),
-		P(g.Raw(
-			fmt.Sprintf(
-				"A %s instance also exists for quick analysis.",
-				"<a href=\"https://api-read.jamesst.one/\" rel=\"noopener\">datasette</a>",
-			),
-		)),
+		// P(g.Raw(
+		// 	fmt.Sprintf(
+		// 		"A %s instance also exists for quick analysis.",
+		// 		"<a href=\"https://api-read.jamesst.one/\" rel=\"noopener\">datasette</a>",
+		// 	),
+		// )),
 	)
 
 	listing := makeListHTML(groupedEntries)
