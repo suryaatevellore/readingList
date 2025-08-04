@@ -212,12 +212,35 @@ func GenerateSite() error {
 		return fmt.Errorf("CSV read error: %w", err)
 	}
 
-	// Now decode into structs
-	decoder, err := csvutil.NewDecoder(csv.NewReader(bytes.NewReader(fcont)))
-	if err != nil {
-		return fmt.Errorf("CSV decoder initialization error: %w", err)
+	// Process records to fix merged lines
+	var fixedRecords [][]string
+	for i, record := range records {
+		if len(record) > 9 {
+			// Log the problematic record for debugging
+			fmt.Printf("Found malformed record at line %d: %v\n", i+1, record)
+
+			// Split the record if it contains a merged URL
+			parts := strings.Split(record[len(record)-1], "https://")
+			if len(parts) > 1 {
+				// Fix the first record
+				firstRecord := make([]string, 9)
+				copy(firstRecord, record[:8])
+				firstRecord[8] = parts[0]
+				fixedRecords = append(fixedRecords, firstRecord)
+
+				// Log the fix
+				fmt.Printf("Split into: %v\n", firstRecord)
+				continue
+			}
+		}
+		fixedRecords = append(fixedRecords, record)
 	}
 
+	// Now decode the fixed records
+	decoder, err := csvutil.NewDecoder(csv.NewReader(bytes.NewReader([]byte(formatAsCSV(fixedRecords)))))
+	if err != nil {
+		return fmt.Errorf("CSV decoder error: %w", err)
+	}
 	if err := decoder.Decode(&entries); err != nil {
 		return fmt.Errorf("CSV decode error: %w", err)
 	}
@@ -254,4 +277,12 @@ func GenerateSite() error {
 	_ = os.Mkdir(outputDir, 0777)
 
 	return ioutil.WriteFile(outputDir+"/index.html", outputContent, 0644)
+}
+
+// Helper function to format records back to CSV
+func formatAsCSV(records [][]string) string {
+	var buf bytes.Buffer
+	writer := csv.NewWriter(&buf)
+	writer.WriteAll(records)
+	return buf.String()
 }
