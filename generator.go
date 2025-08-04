@@ -197,7 +197,7 @@ func GenerateSite() error {
 	records, err := reader.ReadAll()
 	if err != nil {
 		// Print detailed information about the error
-		fmt.Printf("Error reading CSV file: %vof type %T\n", err, err)
+		fmt.Printf("Error reading CSV file: %v of type %T\n", err, err)
 		if parseErr, ok := err.(*csv.ParseError); ok {
 			line := parseErr.Line
 			fmt.Printf("Error on line %d\n", line)
