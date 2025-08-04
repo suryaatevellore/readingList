@@ -189,14 +189,32 @@ func GenerateSite() error {
 	}
 
 	reader := csv.NewReader(bytes.NewReader(fcont))
-	reader.LazyQuotes = true   // Handle quotes more flexibly
-	reader.FieldsPerRecord = 9 // Expect exactly 9 fields
+	reader.LazyQuotes = true       // Handle quotes more flexibly
+	reader.FieldsPerRecord = 9     // Expect exactly 9 fields
+	reader.TrimLeadingSpace = true // Trim leading space from fields
 
-	// Use csvutil with the configured reader
-	decoder, err := csvutil.NewDecoder(reader)
+	// Read raw records first to debug the problematic line
+	records, err := reader.ReadAll()
 	if err != nil {
-		return fmt.Errorf("CSV decoder error: %w", err)
+		// Print detailed information about the error
+		fmt.Printf("Error reading CSV file: %vof type %T\n", err, err)
+		if parseErr, ok := err.(*csv.ParseError); ok {
+			line := parseErr.Line
+			fmt.Printf("Error on line %d\n", line)
+			if line > 0 && line <= len(records) {
+				fmt.Printf("Problem line content: %v\n", records[line-1])
+				fmt.Printf("Number of fields: %d\n", len(records[line-1]))
+			}
+		}
+		return fmt.Errorf("CSV read error: %w", err)
 	}
+
+	// Now decode into structs
+	decoder, err := csvutil.NewDecoder(csv.NewReader(bytes.NewReader(fcont)))
+	if err != nil {
+		return fmt.Errorf("CSV decoder initialization error: %w", err)
+	}
+
 	if err := decoder.Decode(&entries); err != nil {
 		return fmt.Errorf("CSV decode error: %w", err)
 	}
