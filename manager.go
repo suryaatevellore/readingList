@@ -60,13 +60,6 @@ func AddRowToCSV() error {
 		}
 	}
 
-	readData, err := os.ReadFile(csvFilePath)
-	if err != nil {
-		return fmt.Errorf("unable to read CSV file: %w", err)
-	}
-
-	fmt.Printf("read %v bytes from CSV file\n", len(readData))
-
 	// open a CSV file in append mode
 	f, err := os.OpenFile(csvFilePath, os.O_APPEND|os.O_WRONLY, 0644)
 	if err != nil {
