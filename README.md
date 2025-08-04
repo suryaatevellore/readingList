@@ -1,3 +1,6 @@
 # readingList
 
-A list of articles I've read
+A list of articles I've read during 2025. This all started from [this post](https://www.akpain.net/blog/a-year-of-reading/). I spent some time setting it up because it's not the most intuitive process and of course now I have forgotten how I did set it up. I did start with this [gist](https://gist.github.com/codemicro/f7d4d4b687c3ec2e7186ef7efecfcc35) to set up a bookmarklet in my browser that I need to click on everytime I need to set up the article.
+The flow is
+Click on Bookmarklet button -> code captures current in-focus window attributes and sends them over the github repo -> this "action" triggers github actions (defined in append/build.yml) -> github actions trigger go code that adds to the csv file/mongo db -> updates the github page that hosts my website
+One of the problems I have been facing is long startup times for the github actions, which for the most part comes from the time it takes to clone the repo. The repo is big because the csv file is running close to 700kB (which shouldn't be that bad over the download speeds we get), so it takes over 40s to append the action to a list , save to a file and rehost the readingList website. I would like to bring this down.
